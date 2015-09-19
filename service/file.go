@@ -20,33 +20,33 @@ func NewFile(path string) *File {
 	return &File{Path: path}
 }
 
-// Poll computes a hash on the contents of the file, returning health status, the
-// hash as the detail string and posibly an os.Error if an error occurred when polling
+// Poll computes a hash on the contents of the file, returning health status,
+// the hash as the detail string of the Poll and possibly error;
 // if the hash cannot be computed the empty string is returned with false representing failure
-func (this *File) Poll() (monitor.Health, string, error) {
-	hash, err := getHash(this.Path)
+func (file *File) Poll() (monitor.Health, string, error) {
+	hash, err := getHash(file.Path)
 	if err != nil {
 		return monitor.Critical, err.Error(), err
 	}
-	if this.hash != hash {
-		if this.hash == "" {
-			this.hash = hash
-			return monitor.Ok, fmt.Sprintf("file hash: %s", this.hash), nil
+	if file.hash != hash {
+		if file.hash == "" {
+			file.hash = hash
+			return monitor.Ok, fmt.Sprintf("file hash: %s", file.hash), nil
 		}
-		this.hash = hash
-		return monitor.Warning, fmt.Sprintf("file hash changed: %s", this.hash), nil
+		file.hash = hash
+		return monitor.Warning, fmt.Sprintf("file hash changed: %s", file.hash), nil
 	}
-	return monitor.Ok, fmt.Sprintf("file hash: %s", this.hash), nil
+	return monitor.Ok, fmt.Sprintf("file hash: %s", file.hash), nil
 }
 
-func (this *File) Id() string {
-	return this.Path
+func (file *File) Id() string {
+	return file.Path
 }
 
-func (this *File) Interval() int64 {
-	return this.PollInterval
+func (file *File) Interval() int64 {
+	return file.PollInterval
 }
 
-func (this *File) String() string {
-	return "[File:" + this.Id() + "]"
+func (file *File) String() string {
+	return "[File:" + file.Id() + "]"
 }

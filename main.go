@@ -29,7 +29,7 @@ var (
 	confFile   string
 	services     = new(Services)
 	listenAddr = flag.String("port", ":8080", "http port")
-	mon        = monitor.NewMonitor()
+	gomon        = monitor.NewMonitor()
 	templates  = make(map[string]*template.Template)
 )
 
@@ -66,17 +66,17 @@ func main() {
 
 	// submit httpservices for monitoring
 	for _, httpservice := range services.HttpServices {
-		mon.Add(httpservice)
+		gomon.Add(httpservice)
 	}
 
 	// submit tcpservices for monitoring
 	for _, tcpservice := range services.TcpServices {
-		mon.Add(tcpservice)
+		gomon.Add(tcpservice)
 	}
 
 	//submit fileservices for monitoring
 	for _, file := range services.Files {
-		mon.Add(file)
+		gomon.Add(file)
 	}
 
 	// handle static content
@@ -93,7 +93,7 @@ func main() {
 func root(w http.ResponseWriter, r *http.Request) {
 	id := r.URL.Path[1:]
 	if id == "favicon.ico" || id == "" {
-		err := templates["list"].Execute(w, mon)
+		err := templates["list"].Execute(w, gomon)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
@@ -108,14 +108,14 @@ func root(w http.ResponseWriter, r *http.Request) {
 	if pollerId, err := strconv.Atoi(id); err == nil {
 		switch r.Method {
 		case "DELETE":
-			err := mon.Remove(pollerId)
+			err := gomon.Remove(pollerId)
 			if err == nil {
 				fmt.Fprintf(w, "Deleted poller %s\n", id)
 			} else {
 				fmt.Fprintf(w, err.Error())
 			}
 		case "GET":
-			if poller, err := mon.Poller(pollerId); err == nil {
+			if poller, err := gomon.Poller(pollerId); err == nil {
 				err = templates["view"].Execute(w, poller)
 				if err != nil {
 					http.Error(w, err.Error(), http.StatusInternalServerError)

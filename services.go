@@ -12,6 +12,7 @@ import (
 	"github.com/rmorriso/gomon/service"
 )
 
+// the GoMon services 
 type Services struct {
 	Files        []*service.File
 	HttpServices []*service.HttpService

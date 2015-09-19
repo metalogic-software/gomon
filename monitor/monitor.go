@@ -1,6 +1,7 @@
 // Copyright 2015 The Metalogic Software Authors. All rights reserved.
 // Use of this source code is governed by an MIT
 // license that can be found in the LICENSE file
+
 package monitor
 
 import (
@@ -24,68 +25,68 @@ func NewMonitor() *Monitor {
 	return &Monitor{index: 0, pollers: make(map[int]*Poller)}
 }
 
-func (this *Monitor) Add(pollable Pollable) {
-	this.mu.Lock()
-	defer this.mu.Unlock()
+func (mon *Monitor) Add(pollable Pollable) {
+	mon.mu.Lock()
+	defer mon.mu.Unlock()
 
-	this.index++
-	log.Printf("adding Poller[%d]: %v\n", this.index, pollable)
-	poller := NewPoller(this.index, pollable)
-	this.pollers[this.index] = poller
+	mon.index++
+	log.Printf("adding Poller[%d]: %v\n", mon.index, pollable)
+	poller := NewPoller(mon.index, pollable)
+	mon.pollers[mon.index] = poller
 	poller.Exec()
 }
 
-func (this *Monitor) Remove(id int) error {
-	this.mu.Lock()
-	defer this.mu.Unlock()
+func (mon *Monitor) Remove(id int) error {
+	mon.mu.Lock()
+	defer mon.mu.Unlock()
 
-	if poller, present := this.pollers[id]; present == true {
+	if poller, present := mon.pollers[id]; present == true {
 		fmt.Println("removing", id)
 		poller.Terminate()
-		delete(this.pollers, id)
+		delete(mon.pollers, id)
 		return nil
 	}
 	return errors.New("attempt to remove non-existent poller id")
 }
 
-func (this *Monitor) Run(id int) {
-	this.mu.Lock()
-	defer this.mu.Unlock()
+func (mon *Monitor) Run(id int) {
+	mon.mu.Lock()
+	defer mon.mu.Unlock()
 
-	if poller, present := this.pollers[id]; present == true {
+	if poller, present := mon.pollers[id]; present == true {
 		fmt.Println("running", id)
 		poller.Run()
 	}
 }
 
-func (this *Monitor) Pause(id int) {
-	this.mu.Lock()
-	defer this.mu.Unlock()
+func (mon *Monitor) Pause(id int) {
+	mon.mu.Lock()
+	defer mon.mu.Unlock()
 
-	if poller, present := this.pollers[id]; present == true {
+	if poller, present := mon.pollers[id]; present == true {
 		fmt.Println("pausing", id)
 		poller.Pause()
 	}
 }
 
-func (this *Monitor) SetLogging(logging bool) {
-	for _, poller := range this.pollers {
+func (mon *Monitor) SetLogging(logging bool) {
+	for _, poller := range mon.pollers {
 		poller.Log(logging)
 	}
 }
 
-func (this *Monitor) Pollers() map[int]*Poller {
-	return this.pollers
+func (mon *Monitor) Pollers() map[int]*Poller {
+	return mon.pollers
 }
 
-func (this *Monitor) ListAll(w io.Writer) {
-	for _, poller := range this.pollers {
+func (mon *Monitor) ListAll(w io.Writer) {
+	for _, poller := range mon.pollers {
 		fmt.Fprintf(w, "http://localhost:8080/%d<br/>\n", poller.Id())
 	}
 }
 
-func (this *Monitor) PrintDetail(w io.Writer, id int) {
-	poller, present := this.pollers[id]
+func (mon *Monitor) PrintDetail(w io.Writer, id int) {
+	poller, present := mon.pollers[id]
 	if present {
 		fmt.Fprintf(w, "%s<br/>", poller.String())
 		for _, state := range poller.History() {
@@ -96,8 +97,8 @@ func (this *Monitor) PrintDetail(w io.Writer, id int) {
 	}
 }
 
-func (this *Monitor) PollerDetails(id int) (string, error) {
-	poller, present := this.pollers[id]
+func (mon *Monitor) PollerDetails(id int) (string, error) {
+	poller, present := mon.pollers[id]
 	if present {
 		details := fmt.Sprintf("%s<br/>", poller.String())
 		for _, state := range poller.History() {
@@ -108,8 +109,8 @@ func (this *Monitor) PollerDetails(id int) (string, error) {
 	return "", errors.New(fmt.Sprintf("Invalid poller id %d.", id))
 }
 
-func (this *Monitor) Poller(id int) (*Poller, error) {
-	poller, present := this.pollers[id]
+func (mon *Monitor) Poller(id int) (*Poller, error) {
+	poller, present := mon.pollers[id]
 	if present {
 		return poller, nil
 	}

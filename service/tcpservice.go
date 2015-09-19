@@ -29,25 +29,25 @@ func NewTcpService(addr string, port int16) *TcpService {
 
 // Poll attempts to open a TCP connection to the TcpService on its addr and Port
 // and returns OK or an error string.
-func (this *TcpService) Poll() (monitor.Health, string, error) {
-	_, err := net.Dial("tcp", fmt.Sprintf("%s:%d", this.Addr, this.Port))
-	if err != nil && this.IsOpen() {
+func (svc *TcpService) Poll() (monitor.Health, string, error) {
+	_, err := net.Dial("tcp", fmt.Sprintf("%s:%d", svc.Addr, svc.Port))
+	if err != nil && svc.IsOpen() {
 		return monitor.Critical, err.Error(), nil
 	}
 	return monitor.Ok, "listening", nil
 }
 
-func (this *TcpService) Id() string {
-	return this.Addr
+func (svc *TcpService) Id() string {
+	return svc.Addr
 }
 
-func (this *TcpService) Interval() int64 {
-	return this.PollInterval
+func (svc *TcpService) Interval() int64 {
+	return svc.PollInterval
 }
 
-func (this *TcpService) IsOpen() bool {
-	return this.Open
+func (svc *TcpService) IsOpen() bool {
+	return svc.Open
 }
-func (this *TcpService) String() string {
-	return fmt.Sprintf("[TcpService: %v (Port = %d, Open = %v)]", this.Id(), this.Port, this.IsOpen())
+func (svc *TcpService) String() string {
+	return fmt.Sprintf("[TcpService: %v (Port = %d, Open = %v)]", svc.Id(), svc.Port, svc.IsOpen())
 }

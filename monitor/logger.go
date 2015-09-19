@@ -21,10 +21,10 @@ var (
 // Logger maintains a map that stores the most recent states reported by Pollers,
 // and logs the states every logInterval seconds;
 // It returns a chan State to which state updates should be sent.
-func Logger(logInterval time.Duration) (chan State, chan bool) {
-	updates := make(chan State)
+func Logger(logInterval time.Duration) (updates chan State, control chan bool) {
+	updates = make(chan State)
+	control = make(chan bool)
 	stateMap := make(map[int]State)
-	control := make(chan bool)
 	ticker := time.NewTicker(logInterval)
 	go func() {
 		for {

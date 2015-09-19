@@ -14,23 +14,21 @@ import (
 
 const EMPTY_HASH = "ZERO"
 
-// Given a path string and a Hash interface, calculates the hash of the file's
-// content.
-func getHash(path string) (string, error) {
+// getHash computes the hash of the file contents at path
+func getHash(path string) (hash string, err error) {
 	// make a new hash calculator
-	hash := sha1.New()
+	hasher := sha1.New()
 
 	// if we can open the file...
-	file, err := os.Open(path)
-	if err == nil {
+	var file *os.File
+	if file, err = os.Open(path); err == nil {
 		// if we can copy its contents to the hash
-		_, err = io.Copy(hash, file)
-		if err == nil { // return the hash
-			return encodeBase64(hash.Sum(nil)), nil
+		if _, err = io.Copy(hasher, file); err == nil {
+			 // return the hash
+			hash, err = encodeBase64(hasher.Sum(nil)), nil
 		}
 	}
-	// error return
-	return "", err
+	return hash, err
 }
 
 // this is a fairly nasty way of getting a string out of a byte array in Base64
