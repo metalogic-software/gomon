@@ -1,0 +1,11 @@
+{{template "header"}}
+<h1>Pollers</h1>
+<ul>
+{{with .Pollers}}
+  {{range .}}
+    <li>
+     Poller[<a href=/{{.Id}}>{{.Id}}]</a>&nbsp;&nbsp;{{.Pollable | html}}
+    </li>
+  {{end}}
+{{end}}
+{{template "footer"}}

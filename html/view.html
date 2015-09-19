@@ -1,0 +1,11 @@
+{{template "header"}}
+<h1>{{.}}</h1>
+<ul>
+{{with .History}}
+  {{range .}}
+     <li class={{.Health}}>{{.}}</li>
+  {{end}}
+{{end}}
+</ul>
+<h3><a href="/">Back</a></h3>
+{{template "footer"}}
