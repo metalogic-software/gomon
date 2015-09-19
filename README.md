@@ -14,8 +14,22 @@ Perhaps not all was strictly necessary, but it was a good learning exercise.
 
 ```% go get github.com/rmorriso/gomon```
 
+## Running
+
+```% ./gomon```
+
+will use the included default monitor configuration defined in monitor.conf.
+
+You can see the effect of changing the state of a monitored item
+in the default config by editing
+the contents of the monitored file "changeme" or by stopping/starting
+sshd on localhost.
+
 ## TODO
 
 * expose REST API for accessing monitor state, updating pollable properties, etc
 * replace front-end with Angular
-* make monitor list safe for concurrent access
+* delete old monitor data
+
+... but hey, it's just an exercise. Maybe one day :-)
+
