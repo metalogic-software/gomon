@@ -25,11 +25,16 @@ in the default config by editing
 the contents of the monitored file "changeme" or by stopping/starting
 sshd on localhost.
 
+## Testing
+
+There are just a few tests. Run them by executing the test.sh script.
+
 ## TODO
 
 * expose REST API for accessing monitor state, updating pollable properties, etc
 * replace front-end with Angular
 * delete old monitor data
+* more tests
 
 ... but hey, it's just an exercise. Maybe one day :-)
 
