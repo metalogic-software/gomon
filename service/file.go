@@ -4,8 +4,11 @@
 
 package service
 
-import "fmt"
-import "github.com/rmorriso/gomon/monitor"
+import (
+	"fmt"
+
+	"github.com/rmorriso/gomon/monitor"
+)
 
 // File represents a  file to be checked for a change in its hash
 // since the last check
