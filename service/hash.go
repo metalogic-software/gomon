@@ -24,7 +24,7 @@ func getHash(path string) (hash string, err error) {
 	if file, err = os.Open(path); err == nil {
 		// if we can copy its contents to the hash
 		if _, err = io.Copy(hasher, file); err == nil {
-			 // return the hash
+			// return the hash
 			hash, err = encodeBase64(hasher.Sum(nil)), nil
 		}
 	}

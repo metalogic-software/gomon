@@ -7,15 +7,14 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/rmorriso/gomon/monitor"
 	"log"
 	"net/http"
 	_ "net/http/pprof"
 	"regexp"
 	"strconv"
 	"text/template"
-	//	"sync"
-	//	"time"
+
+	"github.com/rmorriso/gomon/monitor"
 )
 
 const (
@@ -27,9 +26,9 @@ const (
 
 var (
 	confFile   string
-	services     = new(Services)
+	services   = new(Services)
 	listenAddr = flag.String("port", ":8080", "http port")
-	gomon        = monitor.NewMonitor()
+	gomon      = monitor.NewMonitor()
 	templates  = make(map[string]*template.Template)
 )
 

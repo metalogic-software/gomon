@@ -6,6 +6,7 @@ package monitor
 
 import (
 	"fmt"
+	"log"
 	"time"
 )
 
@@ -48,7 +49,7 @@ func (poller *Poller) Exec() {
 					poller.updateHistory(health, detail)
 				}
 			case operation := <-poller.control:
-				fmt.Println("control operation", operation)
+				log.Printf("control operation: %s", operation)
 				switch operation {
 				case Run:
 					poller.running = true

@@ -64,7 +64,7 @@ func (mon *Monitor) Pause(id int) {
 	defer mon.mu.Unlock()
 
 	if poller, present := mon.pollers[id]; present == true {
-		fmt.Println("pausing", id)
+		log.Printf("pausing [%d]\n", id)
 		poller.Pause()
 	}
 }

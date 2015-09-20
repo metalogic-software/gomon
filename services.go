@@ -12,7 +12,7 @@ import (
 	"github.com/rmorriso/gomon/service"
 )
 
-// the GoMon services 
+// the GoMon services
 type Services struct {
 	Files        []*service.File
 	HttpServices []*service.HttpService
@@ -25,5 +25,5 @@ func (services *Services) Init(filename string) {
 		log.Fatalf("failed to read %s: %s\n", filename, err)
 	} else if err = json.Unmarshal(conf, &services); err != nil {
 		log.Fatalf("Config error at %s (while reading %s)\n", err, filename)
-	}	
+	}
 }
