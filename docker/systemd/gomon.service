@@ -9,7 +9,7 @@ RestartSec=5
 TimeoutStartSec=30s
 ExecStartPre=-/usr/bin/docker stop gomon
 ExecStartPre=-/usr/bin/docker rm gomon
-ExecStart=/usr/bin/docker run --name gomon -p 80:80 -p 443:443 -v /data/gomon/etc:/etc/gomon -v /var/log/gomon:/tmp priologic/gomon /gomon -c /etc/gomon/monitor.conf
+ExecStart=/usr/bin/docker run --name gomon -p 80:80 -p 443:443 -v /data/gomon/etc:/etc -v /var/log/gomon:/tmp priologic/gomon /gomon -c /etc/monitor.conf
 ExecStop=-/usr/bin/docker stop gomon
 
 [Install]
