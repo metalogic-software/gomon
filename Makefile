@@ -2,23 +2,29 @@
 # Use of this source code is governed by an MIT
 # license that can be found in the LICENSE file.
 
-all: clean
-	@rm -rf docker/build/files/gomon docker/build/files/root/html docker/build/files/root/inc
+all: clean test gomon
 	go fmt
-	go test -i
-	go test
-	CGO_ENABLED=0 go build -a -installsuffix cgo -o gomon
 	make todo
 
-lint: all
-	go vet
-	golint .
+gomon: clean
+	CGO_ENABLED=0 go build -a -installsuffix cgo -o gomon
+
+test: 
+	go test -i github.com/rmorriso/gomon
+	go test -v github.com/rmorriso/gomon
+	go test -i github.com/rmorriso/gomon/service
+	go test -v github.com/rmorriso/gomon/service
+
+lint: 
+	@go vet
+	@golint .
 
 install: all
 	go install
 
 docker: all
 	@cp gomon docker/build/files
+	@cp monitor.conf docker/build/files/root/etc
 	@cp -r html inc docker/build/files/root
 	sudo docker build -t metalogic/gomon docker/build
 
@@ -29,5 +35,6 @@ todo:
 	@grep -n BUG *.go || true
 
 clean:
+	go clean
 	rm -f gomon *~
-
+	rm -rf docker/build/files/gomon docker/build/files/root/etc/monitor.conf docker/build/files/root/html docker/build/files/root/inc
