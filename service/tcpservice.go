@@ -37,17 +37,22 @@ func (svc *TcpService) Poll() (monitor.Health, string, error) {
 	return monitor.Ok, "listening", nil
 }
 
-func (svc *TcpService) Id() string {
+// ID returns the ID of this TcpService pollable
+func (svc *TcpService) ID() string {
 	return svc.Addr
 }
 
+// Interval returns the polling interval (in sec) of this TcpService pollable
 func (svc *TcpService) Interval() int64 {
 	return svc.PollInterval
 }
 
+// IsOpen returns true if the desired state of this TcpService is open
 func (svc *TcpService) IsOpen() bool {
 	return svc.Open
 }
+
+// String returns a string representation of this TcpService pollable suitable for printing
 func (svc *TcpService) String() string {
-	return fmt.Sprintf("[TcpService: %v (Port = %d, Open = %v)]", svc.Id(), svc.Port, svc.IsOpen())
+	return fmt.Sprintf("[TcpService: %v (Port = %d, Open = %v)]", svc.ID(), svc.Port, svc.IsOpen())
 }

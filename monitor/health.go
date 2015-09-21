@@ -4,8 +4,10 @@
 
 package monitor
 
+// Health defines allowed values Ok, Warning, Critical and Unknown
 type Health int
 
+// ok = 0, warning = 1, critical = 2, unknown = 3
 const (
 	Ok Health = iota
 	Warning
@@ -13,7 +15,7 @@ const (
 	Unknown
 )
 
-var healthName []string = []string{"OK", "Warning", "Critical", "Unknown"}
+var healthName = []string{"OK", "Warning", "Critical", "Unknown"}
 
 func (health Health) String() string {
 	return healthName[health]

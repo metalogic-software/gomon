@@ -2,11 +2,11 @@
 // Use of this source code is governed by an MIT
 // license that can be found in the LICENSE file
 
-// an interface for pollable objects
 package monitor
 
+// Pollable defines the pollable interface;
 type Pollable interface {
-	Id() string
+	ID() string
 	Poll() (Health, string, error)
 	Interval() int64
 	String() string

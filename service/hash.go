@@ -12,8 +12,6 @@ import (
 	"os"
 )
 
-const EMPTY_HASH = "ZERO"
-
 // getHash computes the hash of the file contents at path
 func getHash(path string) (hash string, err error) {
 	// make a new hash calculator

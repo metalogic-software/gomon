@@ -17,12 +17,12 @@ var paused *monitor.Poller
 
 func TestMain(m *testing.M) {
 	services.Init("./monitor.conf")
-	for _, httpservice := range services.HttpServices {
-                gomon.Add(httpservice)
-        }
+	for _, httpservice := range services.HTTPServices {
+		gomon.Add(httpservice)
+	}
 	pollers = gomon.Pollers()
 	paused = pollers[3]
-        paused.Pause()
+	paused.Pause()
 	os.Exit(m.Run())
 }
 
@@ -30,11 +30,11 @@ func TestAdd(t *testing.T) {
 	id := 1
 	poller := pollers[id]
 
-	if id != poller.Id() {
-		t.Fatalf("expected %s but got %s\n", id, poller.Id())
+	if id != poller.ID() {
+		t.Fatalf("expected %d but got %d\n", id, poller.ID())
 	}
 
-	expected := "Poller[1]: [HttpService:http://blog.golang.org]"
+	expected := "Poller[1]: [HTTPService:http://blog.golang.org]"
 	desc := poller.String()
 	if desc != expected {
 		t.Fatalf("expected %s but got %s\n", expected, desc)
@@ -52,7 +52,7 @@ func TestRemove(t *testing.T) {
 
 	err := gomon.Remove(id)
 	if err != nil {
-		t.Fatalf("unexpected error removing poller id %s\n", id)
+		t.Fatalf("unexpected error removing poller id %d\n", id)
 	}
 
 	if pollers[id] != nil {
@@ -60,9 +60,9 @@ func TestRemove(t *testing.T) {
 	}
 
 	err = gomon.Remove(nosuchid)
-        if err == nil {
-                t.Fatalf("expected error removing non-existent poller id %s\n", nosuchid)
-        }
+	if err == nil {
+		t.Fatalf("expected error removing non-existent poller id %d\n", nosuchid)
+	}
 }
 
 func TestPollingInterval(t *testing.T) {
@@ -70,31 +70,30 @@ func TestPollingInterval(t *testing.T) {
 	pollable := poller.Pollable()
 
 	ticker := time.NewTicker(time.Duration((pollable.Interval() + 5) * second))
-        for {
-                select {
-                case <-ticker.C:
+	for {
+		select {
+		case <-ticker.C:
 			h := poller.History()
 			if 2 != len(h) {
 				t.Fatalf("expected poll history of length 2 after pollable interval has elapsed\n")
 			}
-		return	
-                }
-        }
+			return
+		}
+	}
 }
 
 func TestPausePolling(t *testing.T) {
-        pollable := paused.Pollable()
+	pollable := paused.Pollable()
 
-        ticker := time.NewTicker(time.Duration((pollable.Interval() + 5) * second))
-        for {
-                select {
-                case <-ticker.C:
-                        h := paused.History()
-                        if 1 != len(h) {
-                                t.Fatalf("expected poll history of length 1 after pollable interval has elapsed on a paused poller but got %d\n", len(h))
-                        }
-	                return
-                }
-        }
+	ticker := time.NewTicker(time.Duration((pollable.Interval() + 5) * second))
+	for {
+		select {
+		case <-ticker.C:
+			h := paused.History()
+			if 1 != len(h) {
+				t.Fatalf("expected poll history of length 1 after pollable interval has elapsed on a paused poller but got %d\n", len(h))
+			}
+			return
+		}
+	}
 }
-

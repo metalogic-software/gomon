@@ -5,7 +5,6 @@
 package monitor
 
 import (
-	"fmt"
 	"log"
 	"time"
 )
@@ -15,7 +14,7 @@ const (
 )
 
 var (
-	logging bool = true
+	logEnabled = true
 )
 
 // Logger maintains a map that stores the most recent states reported by Pollers,
@@ -30,13 +29,13 @@ func Logger(logInterval time.Duration) (updates chan State, control chan bool) {
 		for {
 			select {
 			case <-ticker.C:
-				if logging {
+				if logEnabled {
 					logState(stateMap)
 				}
 			case state := <-updates:
 				stateMap[state.id] = state
-			case logging = <-control:
-				fmt.Println("set logging:", logging)
+			case logEnabled = <-control:
+				log.Printf("set logging: %s", logging)
 			}
 		}
 	}()

@@ -4,14 +4,15 @@
 
 package monitor
 
+// Availability defines allowed values up and down
 type Availability int
 
 const (
-	Up Availability = iota
-	Down
+	up Availability = iota
+	down
 )
 
-var availabilityName []string = []string{"Up", "Down"}
+var availabilityName = []string{"Up", "Down"}
 
 func (availability Availability) String() string {
 	return availabilityName[availability]

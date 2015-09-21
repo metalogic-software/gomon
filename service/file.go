@@ -19,6 +19,7 @@ type File struct {
 	hash         string
 }
 
+// NewFile constructs and initializes a File Pollable
 func NewFile(path string) *File {
 	return &File{Path: path}
 }
@@ -42,14 +43,17 @@ func (file *File) Poll() (monitor.Health, string, error) {
 	return monitor.Ok, fmt.Sprintf("file hash: %s", file.hash), nil
 }
 
-func (file *File) Id() string {
+// ID returns the ID of this File pollable
+func (file *File) ID() string {
 	return file.Path
 }
 
+// Interval returns the polling Interval (in sec) of this File pollable
 func (file *File) Interval() int64 {
 	return file.PollInterval
 }
 
+// String returns a string representation of this File pollable suitable for printing
 func (file *File) String() string {
-	return "[File:" + file.Id() + "]"
+	return "[File:" + file.ID() + "]"
 }

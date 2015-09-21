@@ -12,10 +12,10 @@ import (
 	"github.com/rmorriso/gomon/service"
 )
 
-// the GoMon services
+// Services aggregates the lists of GoMon services
 type Services struct {
 	Files        []*service.File
-	HttpServices []*service.HttpService
+	HTTPServices []*service.HTTPService
 	TcpServices  []*service.TcpService
 }
 

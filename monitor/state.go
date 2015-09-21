@@ -21,18 +21,21 @@ type State struct {
 	start  time.Time
 }
 
-func NewState(pollerId int, health Health, detail string, npolls int) *State {
-	return &State{id: pollerId, health: health, detail: detail, npolls: npolls, start: time.Now()}
+// NewState constructs and initializes a Pollable State
+func NewState(pollerID int, health Health, detail string, npolls int) *State {
+	return &State{id: pollerID, health: health, detail: detail, npolls: npolls, start: time.Now()}
 }
 
 func (state *State) incrementPollCount() {
 	state.npolls = state.npolls + 1
 }
 
+// String returns a string representation of this State suitable for printing
 func (state *State) String() string {
 	return fmt.Sprintf("State: %s - %s, npolls: %d, start %s", state.health, state.detail, state.npolls, state.start.String())
 }
 
+// Health returns the Health value of the State
 func (state *State) Health() Health {
 	return state.health
 }

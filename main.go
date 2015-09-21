@@ -64,7 +64,7 @@ func main() {
 	services.Init(confFile)
 
 	// submit httpservices for monitoring
-	for _, httpservice := range services.HttpServices {
+	for _, httpservice := range services.HTTPServices {
 		gomon.Add(httpservice)
 	}
 
@@ -104,17 +104,18 @@ func root(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if pollerId, err := strconv.Atoi(id); err == nil {
+	var err error
+	if pollerID, err := strconv.Atoi(id); err == nil {
 		switch r.Method {
 		case "DELETE":
-			err := gomon.Remove(pollerId)
+			err := gomon.Remove(pollerID)
 			if err == nil {
 				fmt.Fprintf(w, "Deleted poller %s\n", id)
 			} else {
 				fmt.Fprintf(w, err.Error())
 			}
 		case "GET":
-			if poller, err := gomon.Poller(pollerId); err == nil {
+			if poller, err := gomon.Poller(pollerID); err == nil {
 				err = templates["view"].Execute(w, poller)
 				if err != nil {
 					http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -122,8 +123,7 @@ func root(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		return
-	} else {
-		fmt.Fprintf(w, err.Error())
 	}
+	fmt.Fprintf(w, err.Error())
 	return
 }

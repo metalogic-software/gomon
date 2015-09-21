@@ -4,17 +4,17 @@
 
 package monitor
 
-// the operations defined on a poller
+// Operation defines allowable values on a Poller logging, pause, run, terminate
 type Operation int
 
 const (
-	Logging Operation = iota
-	Pause
-	Run
-	Terminate
+	logging Operation = iota
+	pause
+	run
+	terminate
 )
 
-var operationName []string = []string{"logging", "pause", "run", "terminate"}
+var operationName = []string{"logging", "pause", "run", "terminate"}
 
 // String() returns the string representation of the Operation
 func (operation Operation) String() string {

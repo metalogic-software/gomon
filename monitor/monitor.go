@@ -14,18 +14,18 @@ import (
 	//	"time"
 )
 
-type Monitor struct {
+type monitor struct {
 	index   int
 	mu      sync.Mutex
 	pollers map[int]*Poller
 }
 
-// Monitor constructor
-func NewMonitor() *Monitor {
-	return &Monitor{index: 0, pollers: make(map[int]*Poller)}
+// NewMonitor constructs type monitor with initialized index and Poller map
+func NewMonitor() *monitor {
+	return &monitor{index: 0, pollers: make(map[int]*Poller)}
 }
 
-func (mon *Monitor) Add(pollable Pollable) {
+func (mon *monitor) Add(pollable Pollable) {
 	mon.mu.Lock()
 	defer mon.mu.Unlock()
 
@@ -36,7 +36,7 @@ func (mon *Monitor) Add(pollable Pollable) {
 	poller.Exec()
 }
 
-func (mon *Monitor) Remove(id int) error {
+func (mon *monitor) Remove(id int) error {
 	mon.mu.Lock()
 	defer mon.mu.Unlock()
 
@@ -49,7 +49,7 @@ func (mon *Monitor) Remove(id int) error {
 	return errors.New("attempt to remove non-existent poller id")
 }
 
-func (mon *Monitor) Run(id int) {
+func (mon *monitor) Run(id int) {
 	mon.mu.Lock()
 	defer mon.mu.Unlock()
 
@@ -59,7 +59,7 @@ func (mon *Monitor) Run(id int) {
 	}
 }
 
-func (mon *Monitor) Pause(id int) {
+func (mon *monitor) Pause(id int) {
 	mon.mu.Lock()
 	defer mon.mu.Unlock()
 
@@ -69,23 +69,23 @@ func (mon *Monitor) Pause(id int) {
 	}
 }
 
-func (mon *Monitor) SetLogging(logging bool) {
+func (mon *monitor) SetLogging(logging bool) {
 	for _, poller := range mon.pollers {
 		poller.Log(logging)
 	}
 }
 
-func (mon *Monitor) Pollers() map[int]*Poller {
+func (mon *monitor) Pollers() map[int]*Poller {
 	return mon.pollers
 }
 
-func (mon *Monitor) ListAll(w io.Writer) {
+func (mon *monitor) ListAll(w io.Writer) {
 	for _, poller := range mon.pollers {
-		fmt.Fprintf(w, "http://localhost:8080/%d<br/>\n", poller.Id())
+		fmt.Fprintf(w, "http://localhost:8080/%d<br/>\n", poller.ID())
 	}
 }
 
-func (mon *Monitor) PrintDetail(w io.Writer, id int) {
+func (mon *monitor) PrintDetail(w io.Writer, id int) {
 	poller, present := mon.pollers[id]
 	if present {
 		fmt.Fprintf(w, "%s<br/>", poller.String())
@@ -97,7 +97,7 @@ func (mon *Monitor) PrintDetail(w io.Writer, id int) {
 	}
 }
 
-func (mon *Monitor) PollerDetails(id int) (string, error) {
+func (mon *monitor) PollerDetails(id int) (string, error) {
 	poller, present := mon.pollers[id]
 	if present {
 		details := fmt.Sprintf("%s<br/>", poller.String())
@@ -106,13 +106,13 @@ func (mon *Monitor) PollerDetails(id int) (string, error) {
 		}
 		return details, nil
 	}
-	return "", errors.New(fmt.Sprintf("Invalid poller id %d.", id))
+	return "", fmt.Errorf("Invalid poller id %d.", id)
 }
 
-func (mon *Monitor) Poller(id int) (*Poller, error) {
+func (mon *monitor) Poller(id int) (*Poller, error) {
 	poller, present := mon.pollers[id]
 	if present {
 		return poller, nil
 	}
-	return nil, errors.New(fmt.Sprintf("Invalid poller id %d.", id))
+	return nil, fmt.Errorf("Invalid poller id %d.", id)
 }
