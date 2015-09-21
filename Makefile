@@ -3,20 +3,24 @@
 # license that can be found in the LICENSE file.
 
 all: clean
+	@rm -rf docker/build/files/gomon docker/build/files/root/html docker/build/files/root/inc
 	go fmt
 	go test -i
 	go test
 	CGO_ENABLED=0 go build -a -installsuffix cgo -o gomon
+	make todo
+
+lint: all
 	go vet
 	golint .
-	make todo
 
 install: all
 	go install
 
 docker: all
 	@cp gomon docker/build/files
-	docker build -t metalogic/gomon docker/build
+	@cp -r html inc docker/build/files/root
+	sudo docker build -t metalogic/gomon docker/build
 
 todo:
 	@grep -n ^[[:space:]]*_[[:space:]]*=[[:space:]][[:alnum:]] *.go || true
