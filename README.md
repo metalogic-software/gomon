@@ -12,7 +12,13 @@ Perhaps not all was strictly necessary, but it was a good learning exercise.
 
 ## Building
 
-```% go get github.com/rmorriso/gomon```
+```
+% go get github.com/rmorriso/gomon
+% make gomon
+```
+
+Note that the build is configured to produce a fully static binary for inclusion
+in a bare Docker container (scratch or busybox).
 
 ## Running
 
@@ -27,7 +33,13 @@ sshd on localhost.
 
 ## Testing
 
-There are just a few tests. Run them by executing the test.sh script.
+There are just a few tests:
+
+```% make test```
+
+## Build the Docker Container (Linux Only)
+
+```% make docker```
 
 ## TODO
 
