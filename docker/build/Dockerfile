@@ -5,7 +5,7 @@
 # Scratch container requires a static link (Go 1.4.1) of gomon:
 # CGO_ENABLED=0 go build -a -installsuffix cgo
 
-FROM scratch
+FROM busybox
  
 MAINTAINER Rick Morrison <rmorriso@fedroot.com>
 
