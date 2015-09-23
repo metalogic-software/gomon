@@ -24,7 +24,7 @@ install: all
 
 docker: all
 	@cp gomon docker/build/files
-	@cp monitor.conf docker/build/files/root/etc
+	@cp monitor.conf docker/build/files
 	@cp -r html inc docker/build/files/root
 	sudo docker build -t metalogic/gomon docker/build
 

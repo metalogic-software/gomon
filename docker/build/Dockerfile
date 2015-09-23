@@ -11,6 +11,7 @@ MAINTAINER Rick Morrison <rmorriso@fedroot.com>
 
 COPY files/root /
 ADD files/gomon /gomon
+ADD files/monitor.conf /monitor.conf
 
 EXPOSE 80 443 8080 
 
