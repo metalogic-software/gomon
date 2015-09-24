@@ -28,6 +28,11 @@ docker: all
 	@cp -r html inc docker/build/files/root
 	sudo docker build -t metalogic/gomon docker/build
 
+run: docker
+	sudo docker stop gomon
+	sudo docker rm gomon
+	sudo docker run -d --name gomon -p 8080:8080 metalogic/gomon /gomon
+
 todo:
 	@grep -n ^[[:space:]]*_[[:space:]]*=[[:space:]][[:alnum:]] *.go || true
 	@grep -n TODO *.go || true
