@@ -45,12 +45,13 @@ There are just a few tests:
 
 The container uses the default config file monitor.conf.
 
-To run the docker container, and supply the monitored file changeme execute the following:
+To run the docker container, and supply the monitored file changeme copy changeme to /tmp and execute the following:
 
-```% sudo docker run --name gomon -d -v ./changeme:/changeme -p 8080:8080 metalogic/gomon /gomon```
+```% sudo docker run --name gomon -d -v /tmp/changeme:/changeme -p 8080:8080 metalogic/gomon /gomon```
 
-You can replace ./changeme with a path to any file you want to use for
-checking out file change monitoring.
+Make a change to the file in the container:
+
+```% sudo docker exec -it gomon /bin/sh -c "echo you are changed  >> /changeme"```
 
 ## TODO
 
