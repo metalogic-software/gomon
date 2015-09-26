@@ -41,6 +41,17 @@ There are just a few tests:
 
 ```% make docker```
 
+## Run the Docker Container
+
+The container uses the default config file monitor.conf.
+
+To run the docker container, and supply the monitored file changeme execute the following:
+
+```% sudo docker run --name gomon -d -v ./changeme:/changeme -p 8080:8080 metalogic/gomon /gomon```
+
+You can replace ./changeme with a path to any file you want to use for
+checking out file change monitoring.
+
 ## TODO
 
 * expose REST API for accessing monitor state, updating pollable properties, etc
