@@ -13,3 +13,5 @@ COPY files/root /
 
 EXPOSE 80 443 8080 
 
+CMD /gomon -port :80 -c /etc/monitor.conf
+
