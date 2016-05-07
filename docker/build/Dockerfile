@@ -1,5 +1,3 @@
-# DOCKER-VERSION 1.7
-
 # gomon (github.com/rmorriso/gomon)
 
 # Scratch container requires a static link of gomon:
