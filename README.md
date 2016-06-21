@@ -3,22 +3,24 @@
 
 This is one of the first programs I wrote in Go. At the time - 2011 - that
 was pre-Go 1.0. It has compiled under each subsequent release, now at
-1.5.1 without modification. At least in my case Go has more than lived up to
+1.6.2 without modification. At least in my case Go has more than lived up to
 its "compatibility promise."
 
 I chose this problem to work on since it gave me an opportunity to play
 with goroutines, channels, interfaces and even HTML templates.
+I'm in the process of migrating the Go template stuff to ReactJS - frontend
+is not my forte so it will be more than a bit clunky.
 Perhaps not all was strictly necessary, but it was a good learning exercise.
 
 ## Building
 
 ```
 % go get github.com/rmorriso/gomon
-% make gomon
+% make all
 ```
 
-Note that the build is configured to produce a fully static binary for inclusion
-in a bare Docker container (scratch or busybox).
+Note that the build is configured to produce fully static binaries for inclusion
+in a minimal Docker container (alpine:latest).
 
 ## Running
 
