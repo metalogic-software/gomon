@@ -1,0 +1,5 @@
+#!/bin/sh
+
+$(cd rest ; ./api) &
+$(cd web ; ./dashboard) &
+ 
