@@ -2,12 +2,12 @@
 # Use of this source code is governed by an MIT
 # license that can be found in the LICENSE file.
 
-all: test rest/api web/dashboard
+all: test gomon
 	go fmt
 	make todo
 
-gomon: clean
-	CGO_ENABLED=0 go build -a -installsuffix cgo -o gomon
+gomon: rest/api web/dashboard
+	touch gomon
 
 rest/api:
 	cd rest && CGO_ENABLED=0 go build -a -installsuffix cgo -o api
