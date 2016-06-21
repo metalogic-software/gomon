@@ -84,7 +84,7 @@ func (poller *Poller) Terminate() {
 	poller.control <- terminate
 }
 
-// Log toggles Poller logging off and on 
+// Log toggles Poller logging off and on
 func (poller *Poller) Log(enable bool) {
 	if poller.logging == enable {
 		return
@@ -97,7 +97,7 @@ func (poller *Poller) ID() int {
 	return poller.id
 }
 
-// History returns the state history 
+// History returns the state history
 func (poller *Poller) History() []*State {
 	return poller.history
 }

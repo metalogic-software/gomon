@@ -1,1 +1,0 @@
-A file with fixed content (do not edit) for use in the getHas test.

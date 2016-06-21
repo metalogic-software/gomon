@@ -1,4 +1,4 @@
-# Copyright 2015 The Metalogic Software Authors. All rights reserved.
+# Copyright 2012-2016 The Metalogic Software Authors. All rights reserved.
 # Use of this source code is governed by an MIT
 # license that can be found in the LICENSE file.
 
@@ -12,8 +12,8 @@ gomon: clean
 test: 
 	go test -i github.com/rmorriso/gomon
 	go test -v github.com/rmorriso/gomon
-	go test -i github.com/rmorriso/gomon/service
-	go test -v github.com/rmorriso/gomon/service
+	go test -i github.com/rmorriso/gomon/check
+	go test -v github.com/rmorriso/gomon/check
 
 lint: 
 	@go vet
@@ -34,10 +34,10 @@ run: docker
 	sudo docker run -d --name gomon -p 8080:8080 metalogic/gomon /gomon
 
 todo:
-	@grep -n ^[[:space:]]*_[[:space:]]*=[[:space:]][[:alnum:]] *.go || true
-	@grep -n TODO *.go || true
-	@grep -n FIXME *.go || true
-	@grep -n BUG *.go || true
+	@find . -name \*.go -exec grep -Hn ^[[:space:]]*_[[:space:]]*=[[:space:]][[:alnum:]] \{\} \;
+	@find . -name \*.go -exec grep -Hn TODO \{\} \;
+	@find . -name \*.go -exec grep -Hn FIXME \{\} \;
+	@find . -name \*.go -exec grep -Hn BUG \{\} \;
 
 clean:
 	go clean
