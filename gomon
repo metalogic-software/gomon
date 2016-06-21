@@ -1,0 +1,5 @@
+#!/bin/sh
+
+./rest/api
+./web/dashboard
+
