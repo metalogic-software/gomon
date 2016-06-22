@@ -16,9 +16,9 @@ var pollers map[int]*monitor.Poller
 var paused *monitor.Poller
 
 func TestMain(m *testing.M) {
-	services.Init("./monitor.conf")
-	for _, httpservice := range services.HTTPServices {
-		gomon.Add(httpservice)
+	checks.Init("./monitor.conf")
+	for _, httpcheck := range checks.HTTPChecks {
+		gomon.Add(httpcheck)
 	}
 	pollers = gomon.Pollers()
 	paused = pollers[3]
@@ -34,7 +34,7 @@ func TestAdd(t *testing.T) {
 		t.Fatalf("expected %d but got %d\n", id, poller.ID())
 	}
 
-	expected := "Poller[1]: [HTTPService:http://blog.golang.org]"
+	expected := "Poller[1]: [HTTPCheck:http://blog.golang.org]"
 	desc := poller.String()
 	if desc != expected {
 		t.Fatalf("expected %s but got %s\n", expected, desc)

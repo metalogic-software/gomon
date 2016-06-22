@@ -26,7 +26,7 @@ const (
 var (
 	confFile   string
 	checks     = new(Checks)
-	listenAddr = flag.String("port", ":8080", "http port")
+	listenAddr = flag.String("port", ":8081", "http port")
 	gomon      = monitor.NewMonitor()
 )
 
@@ -52,6 +52,53 @@ func main() {
 	flag.Parse()
 	checks.Init(confFile)
 
+	addChecks()
+
+	http.HandleFunc("/", root)
+	err := http.ListenAndServe(*listenAddr, nil)
+	if err != nil {
+		log.Fatal("ListenAndServe: ", err)
+	}
+}
+
+// root directory handler
+func root(w http.ResponseWriter, r *http.Request) {
+	id := r.URL.Path[1:]
+
+	if id == "" {
+		for _, poller := range gomon.Pollers() {
+			fmt.Fprintf(w, "%s\n", poller.Json())
+		}
+		return
+	}
+
+	if !idValidator.MatchString(id) {
+		http.NotFound(w, r)
+		return
+	}
+
+	var err error
+	if pollerID, err := strconv.Atoi(id); err == nil {
+		switch r.Method {
+		case "DELETE":
+			err := gomon.Remove(pollerID)
+			if err == nil {
+				fmt.Fprintf(w, "Deleted poller %s\n", id)
+			} else {
+				fmt.Fprintf(w, err.Error())
+			}
+		case "GET":
+			if details, err := gomon.PollerDetails(pollerID); err == nil {
+				fmt.Fprintf(w, "%s\n", details)
+			}
+		}
+		return
+	}
+	fmt.Fprintf(w, err.Error())
+	return
+}
+
+func addChecks() {
 	// submit httpchecks for monitoring
 	for _, httpcheck := range checks.HTTPChecks {
 		gomon.Add(httpcheck)
@@ -71,40 +118,4 @@ func main() {
 	for _, shellcheck := range checks.ShellChecks {
 		gomon.Add(shellcheck)
 	}
-
-	http.HandleFunc("/", root)
-	err := http.ListenAndServe(*listenAddr, nil)
-	if err != nil {
-		log.Fatal("ListenAndServe: ", err)
-	}
-}
-
-// root directory handler
-func root(w http.ResponseWriter, r *http.Request) {
-	id := r.URL.Path[1:]
-
-	if !idValidator.MatchString(id) {
-		http.NotFound(w, r)
-		return
-	}
-
-	var err error
-	if pollerID, err := strconv.Atoi(id); err == nil {
-		switch r.Method {
-		case "DELETE":
-			err := gomon.Remove(pollerID)
-			if err == nil {
-				fmt.Fprintf(w, "Deleted poller %s\n", id)
-			} else {
-				fmt.Fprintf(w, err.Error())
-			}
-		case "GET":
-			if poller, err := gomon.Poller(pollerID); err == nil {
-				fmt.Fprintf(w, "%s\n", poller)
-			}
-		}
-		return
-	}
-	fmt.Fprintf(w, err.Error())
-	return
 }

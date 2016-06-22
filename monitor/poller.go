@@ -5,6 +5,7 @@
 package monitor
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"time"
@@ -18,12 +19,12 @@ const (
 
 // Poller controls execution of a Pollable and records its history
 type Poller struct {
-	id       int
-	pollable Pollable
-	nerrs    int
-	history  []*State
-	running  bool
-	logging  bool
+	ID       int
+	Pollable Pollable
+	Nerrs    int
+	History  []*State
+	Running  bool
+	Logging  bool
 	ticker   *time.Ticker
 	control  chan Operation
 }
@@ -31,11 +32,11 @@ type Poller struct {
 // NewPoller constructs and initializes a Poller
 func NewPoller(id int, pollable Pollable) *Poller {
 	return &Poller{
-		id:       id,
-		pollable: pollable,
-		nerrs:    0,
-		history:  []*State{NewState(id, Unknown, "initializing poller", 0)},
-		running:  true,
+		ID:       id,
+		Pollable: pollable,
+		Nerrs:    0,
+		History:  []*State{NewState(id, Unknown, "initializing poller", 0)},
+		Running:  true,
 		ticker:   time.NewTicker(time.Duration(pollable.Interval() * second)),
 		control:  make(chan Operation),
 	}
@@ -47,22 +48,22 @@ func (poller *Poller) Exec() {
 		for {
 			select {
 			case <-poller.ticker.C:
-				if poller.running { // TODO: handle error
-					health, detail, _ := poller.pollable.Poll()
+				if poller.Running { // TODO: handle error
+					health, detail, _ := poller.Pollable.Poll()
 					poller.updateHistory(health, detail)
 				}
 			case operation := <-poller.control:
 				log.Printf("control operation: %s", operation)
 				switch operation {
 				case run:
-					poller.running = true
+					poller.Running = true
 				case pause:
-					poller.running = false
+					poller.Running = false
 				case terminate:
 					return
 				case logging:
-					poller.logging = !poller.logging
-					fmt.Println("set logging:", poller.logging)
+					poller.Logging = !poller.Logging
+					fmt.Println("set logging:", poller.Logging)
 				}
 			}
 		}
@@ -86,39 +87,32 @@ func (poller *Poller) Terminate() {
 
 // Log toggles Poller logging off and on
 func (poller *Poller) Log(enable bool) {
-	if poller.logging == enable {
+	if poller.Logging == enable {
 		return
 	}
 	poller.control <- logging
 }
 
-// ID returns the ID of this Poller
-func (poller *Poller) ID() int {
-	return poller.id
-}
-
-// History returns the state history
-func (poller *Poller) History() []*State {
-	return poller.history
-}
-
 func (poller *Poller) updateHistory(health Health, detail string) {
-	current := poller.history[len(poller.history)-1]
+	current := poller.History[len(poller.History)-1]
 
-	if current.health == health { //health status unchanged
+	if current.Health == health { //health status unchanged
 		current.incrementPollCount()
 	} else { // health status changed
-		newState := NewState(poller.id, health, detail, 1)
-		poller.history = append(poller.history, newState)
+		newState := NewState(poller.ID, health, detail, 1)
+		poller.History = append(poller.History, newState)
 	}
-}
-
-// Pollable returns the Pollable controlled by this Poller
-func (poller *Poller) Pollable() Pollable {
-	return poller.pollable
 }
 
 // String returns a string representation of the Poller suitable for printing
 func (poller *Poller) String() string {
-	return fmt.Sprintf("Poller[%d]: %s", poller.id, poller.pollable.String())
+	return fmt.Sprintf("Poller[%d]: %s", poller.ID, poller.Pollable.String())
+}
+
+func (poller *Poller) Json() []byte {
+	jout, err := json.Marshal(poller)
+	if err != nil {
+		return []byte(fmt.Sprintf(`{ "error" : "failed to marshall poller %d" }`, poller.ID))
+	}
+	return jout
 }

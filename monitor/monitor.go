@@ -81,7 +81,7 @@ func (mon *monitor) Pollers() map[int]*Poller {
 
 func (mon *monitor) ListAll(w io.Writer) {
 	for _, poller := range mon.pollers {
-		fmt.Fprintf(w, "http://localhost:8080/%d<br/>\n", poller.ID())
+		fmt.Fprintf(w, "http://localhost:8080/%d<br/>\n", poller.ID)
 	}
 }
 
@@ -89,7 +89,7 @@ func (mon *monitor) PrintDetail(w io.Writer, id int) {
 	poller, present := mon.pollers[id]
 	if present {
 		fmt.Fprintf(w, "%s<br/>", poller.String())
-		for _, state := range poller.History() {
+		for _, state := range poller.History {
 			fmt.Fprintf(w, "%s<br/>", state.String())
 		}
 	} else {
@@ -101,7 +101,7 @@ func (mon *monitor) PollerDetails(id int) (string, error) {
 	poller, present := mon.pollers[id]
 	if present {
 		details := fmt.Sprintf("%s<br/>", poller.String())
-		for _, state := range poller.History() {
+		for _, state := range poller.History {
 			details = details + fmt.Sprintf("%s<br/>", state.String())
 		}
 		return details, nil

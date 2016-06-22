@@ -33,7 +33,7 @@ func Logger(logInterval time.Duration) (updates chan State, control chan bool) {
 					logState(stateMap)
 				}
 			case state := <-updates:
-				stateMap[state.id] = state
+				stateMap[state.ID] = state
 			case logEnabled = <-control:
 				log.Printf("set logging: %s", logging)
 			}

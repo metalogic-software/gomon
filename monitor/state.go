@@ -14,28 +14,23 @@ import (
 // of consecutive polls returning the same health status since the previous
 // state change
 type State struct {
-	id     int
-	health Health
-	detail string
-	npolls int
-	start  time.Time
+	ID     int
+	Health Health
+	Detail string
+	Npolls int
+	Start  time.Time
 }
 
 // NewState constructs and initializes a Pollable State
 func NewState(pollerID int, health Health, detail string, npolls int) *State {
-	return &State{id: pollerID, health: health, detail: detail, npolls: npolls, start: time.Now()}
+	return &State{ID: pollerID, Health: health, Detail: detail, Npolls: npolls, Start: time.Now()}
 }
 
 func (state *State) incrementPollCount() {
-	state.npolls = state.npolls + 1
+	state.Npolls = state.Npolls + 1
 }
 
 // String returns a string representation of this State suitable for printing
 func (state *State) String() string {
-	return fmt.Sprintf("State: %s - %s, npolls: %d, start %s", state.health, state.detail, state.npolls, state.start.String())
-}
-
-// Health returns the Health value of the State
-func (state *State) Health() Health {
-	return state.health
+	return fmt.Sprintf("State: %s - %s, npolls: %d, start %s", state.Health, state.Detail, state.Npolls, state.Start.String())
 }
