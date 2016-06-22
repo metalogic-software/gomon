@@ -2,27 +2,38 @@
 # Use of this source code is governed by an MIT
 # license that can be found in the LICENSE file.
 
-all: test gomon
-	go fmt
+gomon: rest/api web/dashboard
+	gofmt -w .
+
+all:
+	make gomon
+	make test
+	make lint
 	make todo
 
-gomon: rest/api web/dashboard
-	touch gomon
-
-rest/api:
+rest/api: rest/*.go
+	go test -i github.com/rmorriso/gomon/rest
 	cd rest && CGO_ENABLED=0 go build -a -installsuffix cgo -o api
-web/dashboard:
+
+web/dashboard: web/*.go
+	go test -i github.com/rmorriso/gomon/web
 	cd web && CGO_ENABLED=0 go build -a -installsuffix cgo -o dashboard
 
 test: 
-	go test -i github.com/rmorriso/gomon
-	go test -v github.com/rmorriso/gomon
 	go test -i github.com/rmorriso/gomon/check
 	go test -v github.com/rmorriso/gomon/check
+	go test -i github.com/rmorriso/gomon/monitor
+	go test -v github.com/rmorriso/gomon/monitor
+	go test -i github.com/rmorriso/gomon/rest
+	go test -v github.com/rmorriso/gomon/rest
+	go test -i github.com/rmorriso/gomon/web
+	go test -v github.com/rmorriso/gomon/web
 
 lint: 
-	@go vet
-	@golint .
+	@go vet github.com/rmorriso/gomon/rest
+	@go vet github.com/rmorriso/gomon/web
+	@golint rest
+	@golint web
 
 install: all
 	go install
@@ -47,4 +58,7 @@ todo:
 clean:
 	go clean
 	rm -f gomon *~
+	rm -f rest/api
+	rm -f web/dashboard
 	rm -rf docker/build/files/root/gomon docker/build/files/root/etc/monitor.conf docker/build/files/root/html docker/build/files/root/inc
+
