@@ -30,8 +30,8 @@ func TestAdd(t *testing.T) {
 	id := 1
 	poller := pollers[id]
 
-	if id != poller.ID() {
-		t.Fatalf("expected %d but got %d\n", id, poller.ID())
+	if id != poller.ID {
+		t.Fatalf("expected %d but got %d\n", id, poller.ID)
 	}
 
 	expected := "Poller[1]: [HTTPCheck:http://blog.golang.org]"
@@ -40,7 +40,7 @@ func TestAdd(t *testing.T) {
 		t.Fatalf("expected %s but got %s\n", expected, desc)
 	}
 
-	h := len(poller.History())
+	h := len(poller.History)
 	if 1 != h {
 		t.Fatalf("expected %d but got %d\n", 1, h)
 	}
@@ -67,13 +67,13 @@ func TestRemove(t *testing.T) {
 
 func TestPollingInterval(t *testing.T) {
 	poller := pollers[2]
-	pollable := poller.Pollable()
+	pollable := poller.Pollable
 
 	ticker := time.NewTicker(time.Duration((pollable.Interval() + 5) * second))
 	for {
 		select {
 		case <-ticker.C:
-			h := poller.History()
+			h := poller.History
 			if 2 != len(h) {
 				t.Fatalf("expected poll history of length 2 after pollable interval has elapsed\n")
 			}
@@ -83,13 +83,13 @@ func TestPollingInterval(t *testing.T) {
 }
 
 func TestPausePolling(t *testing.T) {
-	pollable := paused.Pollable()
+	pollable := paused.Pollable
 
 	ticker := time.NewTicker(time.Duration((pollable.Interval() + 5) * second))
 	for {
 		select {
 		case <-ticker.C:
-			h := paused.History()
+			h := paused.History
 			if 1 != len(h) {
 				t.Fatalf("expected poll history of length 1 after pollable interval has elapsed on a paused poller but got %d\n", len(h))
 			}
