@@ -24,7 +24,7 @@ in a minimal Docker container (alpine:latest).
 
 ## Running
 
-```% ./gomon```
+```% ./rest/api -port 8081 && ./web/dashboard -port 8080 -api http://localhost:8081```
 
 will use the included default monitor configuration defined in monitor.conf.
 
@@ -49,7 +49,7 @@ The container uses the default config file monitor.conf.
 
 To run the docker container, and supply the monitored file changeme copy changeme to /tmp and execute the following:
 
-```% sudo docker run --name gomon -d -v /tmp/changeme:/changeme -p 8080:8080 metalogic/gomon /gomon```
+```% sudo docker run --name gomon -d -v /tmp/changeme:/changeme -p 8080:8080 metalogic/gomon```
 
 Make a change to the file in the container:
 
