@@ -1,4 +1,4 @@
-// Copyright 2015 The Metalogic Software Authors. All rights reserved.
+// Copyright 2012-2016 The Metalogic Software Authors. All rights reserved.
 // Use of this source code is governed by an MIT
 // license that can be found in the LICENSE file.
 
@@ -10,7 +10,8 @@ import (
 	"log"
 	"net/http"
 	_ "net/http/pprof"
-	"regexp"
+	"os"
+	"path/filepath"
 	"strconv"
 
 	"github.com/rmorriso/gomon/monitor"
@@ -25,40 +26,33 @@ const (
 
 var (
 	confFile   string
+	port       = flag.Int("port", 8080, "listen port")
+	listenAddr string
+	rundir     string
 	checks     = new(Checks)
-	listenAddr = flag.String("port", ":8081", "http port")
 	gomon      = monitor.NewMonitor()
 )
 
 func init() {
-	flag.StringVar(&confFile, "c", defaultConf, "the monitor services config file")
 	log.SetPrefix("[gomon]: ")
-}
-
-var idValidator = regexp.MustCompile("^[1-9][0-9]*$")
-
-func makeHandler(fn func(http.ResponseWriter, *http.Request, string)) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		id := r.URL.Path[1:]
-		if !idValidator.MatchString(id) {
-			http.NotFound(w, r)
-			return
-		}
-		fn(w, r, id)
+	rundir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	if err != nil {
+		log.Fatal(err)
 	}
+	flag.StringVar(&confFile, "c", fmt.Sprintf("%s/%s", rundir, defaultConf), "the monitor checks config file")
 }
 
 func main() {
 	flag.Parse()
+
+	listenAddr = fmt.Sprintf(":%d", *port)
+
 	checks.Init(confFile)
 
 	addChecks()
 
-	http.HandleFunc("/", root)
-	err := http.ListenAndServe(*listenAddr, nil)
-	if err != nil {
-		log.Fatal("ListenAndServe: ", err)
-	}
+	route(listenAddr)
+
 }
 
 // root directory handler
