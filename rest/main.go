@@ -26,7 +26,7 @@ const (
 
 var (
 	confFile   string
-	port       = flag.Int("port", 8080, "listen port")
+	port       = flag.Int("port", 9080, "listen port")
 	listenAddr string
 	rundir     string
 	checks     = new(Checks)
