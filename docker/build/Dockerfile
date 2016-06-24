@@ -9,9 +9,10 @@ FROM alpine:latest
  
 MAINTAINER Rick Morrison <rmorriso@fedroot.com>
 
-COPY files/root /
+RUN apk update
+RUN apk --no-cache add ca-certificates curl
 
 EXPOSE 80 443 8080 
 
-CMD /api -port :8080 -c /etc/monitor.conf && /dashboard -api http://localhost:8080/
+CMD /api -port :8081 -c /etc/monitor.conf && /dashboard -port 8080 -api http://localhost:8081/
 
