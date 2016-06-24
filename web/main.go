@@ -20,7 +20,9 @@ const (
 
 var (
 	confFile   string
-	listenAddr = flag.String("port", ":8080", "http port")
+	listenAddr string
+	api = flag.String("api", "http://localhost:9080", "api base url")
+	port       = flag.Int("port", 8080, "http port")
 	templates  = make(map[string]*template.Template)
 )
 
@@ -40,11 +42,13 @@ func loadTemplates() {
 func main() {
 	flag.Parse()
 
+	listenAddr = fmt.Sprintf(":%d", *port)
+
 	// handle static content
 	http.Handle("/inc/", http.FileServer(http.Dir("")))
 
 	http.HandleFunc("/", root)
-	err := http.ListenAndServe(*listenAddr, nil)
+	err := http.ListenAndServe(listenAddr, nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
