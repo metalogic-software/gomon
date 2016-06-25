@@ -1,0 +1,21 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"path": "github.com/codegangsta/inject",
+			"revision": "33e0aa1cb7c019ccc3fbe049a8262a6403d30504",
+			"revisionTime": "2015-01-14T15:56:00-08:00"
+		},
+		{
+			"path": "github.com/codeskyblue/go-sh",
+			"revision": "b7c09e505267c5137dfb15b834299dac33dae7b4",
+			"revisionTime": "2016-02-24T07:50:40+08:00"
+		},
+		{
+			"path": "github.com/julienschmidt/httprouter",
+			"revision": "109e267447e95ad1bb48b758e40dd7453eb7b039",
+			"revisionTime": "2015-09-05T19:25:33+02:00"
+		}
+	]
+}
