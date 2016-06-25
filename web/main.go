@@ -21,7 +21,7 @@ const (
 var (
 	confFile   string
 	listenAddr string
-	api = flag.String("api", "http://localhost:9080", "api base url")
+	api        = flag.String("api", "http://localhost:9080", "api base url")
 	port       = flag.Int("port", 8080, "http port")
 	templates  = make(map[string]*template.Template)
 )
