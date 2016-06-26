@@ -5,8 +5,9 @@
 package check
 
 import (
-	"github.com/rmorriso/gomon/monitor"
 	"net/http"
+
+	"github.com/rmorriso/gomon/monitor"
 )
 
 // HTTPCheck represents an HTTP URL to be polled and the
@@ -16,6 +17,7 @@ import (
 // HTTPCheck implements the pollable interface
 type HTTPCheck struct {
 	URL          string
+	Timeout      int64
 	PollInterval int64
 }
 
