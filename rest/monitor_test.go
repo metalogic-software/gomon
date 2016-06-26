@@ -75,7 +75,7 @@ func TestPollingInterval(t *testing.T) {
 		case <-ticker.C:
 			h := poller.History
 			if 2 != len(h) {
-				t.Fatalf("expected poll history of length 2 after pollable interval has elapsed\n")
+				t.Fatalf("expected poll history of length 2 after pollable interval has elapsed but ogt %d\n", len(h))
 			}
 			return
 		}
