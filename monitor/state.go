@@ -26,11 +26,11 @@ func NewState(pollerID int, health Health, detail string, npolls int) *State {
 	return &State{ID: pollerID, Health: health, Detail: detail, Npolls: npolls, Start: time.Now()}
 }
 
-func (state *State) incrementPollCount() {
+func (state State) incrementPollCount() {
 	state.Npolls = state.Npolls + 1
 }
 
 // String returns a string representation of this State suitable for printing
-func (state *State) String() string {
+func (state State) String() string {
 	return fmt.Sprintf("State: %s - %s, npolls: %d, start %s", state.Health, state.Detail, state.Npolls, state.Start.String())
 }
