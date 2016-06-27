@@ -4,7 +4,8 @@
 
 package monitor
 
-// Operation defines allowable values on a Poller logging, pause, run, terminate
+// Operation defines allowable operations that may be executed on
+// a Poller: enable logging, pause, run or terminate the poller
 type Operation int
 
 const (
