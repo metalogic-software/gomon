@@ -109,6 +109,7 @@ func (poller *Poller) String() string {
 	return fmt.Sprintf("Poller[%d]: %s", poller.ID, poller.Pollable.String())
 }
 
+// Json returns the JSON byte representaton of poller
 func (poller *Poller) Json() []byte {
 	jout, err := json.Marshal(poller)
 	if err != nil {
