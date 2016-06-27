@@ -1,4 +1,4 @@
-// Copyright 2015 The Metalogic Software Authors. All rights reserved.
+// Copyright 2012-2016 The Metalogic Software Authors. All rights reserved.
 // Use of this source code is governed by an MIT
 // license that can be found in the LICENSE file.
 
@@ -12,7 +12,7 @@ import (
 	"github.com/rmorriso/gomon/monitor"
 )
 
-var pollers map[int]*monitor.Poller
+var _pollers map[int]*monitor.Poller
 var paused *monitor.Poller
 
 func TestMain(m *testing.M) {
@@ -20,15 +20,15 @@ func TestMain(m *testing.M) {
 	for _, httpcheck := range checks.HTTPChecks {
 		gomon.Add(httpcheck)
 	}
-	pollers = gomon.Pollers()
-	paused = pollers[3]
+	_pollers = gomon.Pollers()
+	paused = _pollers[3]
 	paused.Pause()
 	os.Exit(m.Run())
 }
 
 func TestAdd(t *testing.T) {
 	id := 1
-	poller := pollers[id]
+	poller := _pollers[id]
 
 	if id != poller.ID {
 		t.Fatalf("expected %d but got %d\n", id, poller.ID)
@@ -55,8 +55,8 @@ func TestRemove(t *testing.T) {
 		t.Fatalf("unexpected error removing poller id %d\n", id)
 	}
 
-	if pollers[id] != nil {
-		t.Fatalf("pollers[%d] is not empty after Remove()\n", id)
+	if _pollers[id] != nil {
+		t.Fatalf("_pollers[%d] is not empty after Remove()\n", id)
 	}
 
 	err = gomon.Remove(nosuchid)
@@ -66,7 +66,7 @@ func TestRemove(t *testing.T) {
 }
 
 func TestPollingInterval(t *testing.T) {
-	poller := pollers[2]
+	poller := _pollers[2]
 	pollable := poller.Pollable
 
 	ticker := time.NewTicker(time.Duration((pollable.Interval() + 5) * second))
