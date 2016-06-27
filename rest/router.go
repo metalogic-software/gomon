@@ -13,20 +13,20 @@ import (
 func route(listenAddr string) {
 
 	router := httprouter.New()
-	router.GET("/", Index)
-	router.GET("/pollers", Pollers)
-	router.GET("/pollers/:id", Poller)
-	router.GET("/pollers/:id/history", PollerHistory)
-	router.DELETE("/pollers/:id", PollerDelete)
+	router.GET("/", index)
+	router.GET("/pollers", pollers)
+	router.GET("/pollers/:id", poller)
+	router.GET("/pollers/:id/history", pollerHistory)
+	router.DELETE("/pollers/:id", pollerDelete)
 
 	log.Fatal(http.ListenAndServe(listenAddr, router))
 }
 
-func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	fmt.Fprint(w, "Welcome!\n")
 }
 
-func Poller(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func poller(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	id := ps.ByName("id")
 	if !idValidator.MatchString(id) {
 		http.NotFound(w, r)
@@ -35,17 +35,17 @@ func Poller(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	fmt.Fprintf(w, "Poller %s\n", ps.ByName("id"))
 }
 
-func PollerHistory(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func pollerHistory(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	fmt.Fprintf(w, "Poller history of %s\n", ps.ByName("id"))
 }
 
-func Pollers(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func pollers(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	for _, poller := range gomon.Pollers() {
 		fmt.Fprintf(w, "%s\n", poller.Json())
 	}
 }
 
-func PollerDelete(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+func pollerDelete(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	id := ps.ByName("id")
 	if !idValidator.MatchString(id) {
 		http.NotFound(w, r)
