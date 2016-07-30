@@ -1,15 +1,18 @@
+# DOCKER-VERSION 1.7
+
 # gomon (github.com/rmorriso/gomon)
 
 # Scratch container requires a static link of gomon:
 # CGO_ENABLED=0 go build -a -installsuffix cgo
 
-FROM alpine
+FROM alpine:latest
  
 MAINTAINER Rick Morrison <rmorriso@fedroot.com>
 
-COPY files/root /
+RUN apk update
+RUN apk --no-cache add ca-certificates curl
 
 EXPOSE 80 443 8080 
 
-CMD /gomon -port :80 -c /etc/monitor.conf
+CMD /api -port :9080 -c /etc/monitor.conf && /dashboard -port 8080 -api http://localhost:9080/
 
