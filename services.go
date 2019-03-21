@@ -9,7 +9,7 @@ import (
 	"io/ioutil"
 	"log"
 
-	"github.com/rmorriso/gomon/service"
+	"github.com/metalogic-software/gomon/service"
 )
 
 // Services aggregates the lists of GoMon services

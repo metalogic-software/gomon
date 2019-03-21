@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/rmorriso/gomon/monitor"
+	"github.com/metalogic-software/gomon/monitor"
 )
 
 var pollers map[int]*monitor.Poller

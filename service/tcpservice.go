@@ -6,7 +6,7 @@ package service
 
 import (
 	"fmt"
-	"github.com/rmorriso/gomon/monitor"
+	"github.com/metalogic-software/gomon/monitor"
 	"net"
 )
 

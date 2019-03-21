@@ -14,7 +14,7 @@ import (
 	"strconv"
 	"text/template"
 
-	"github.com/rmorriso/gomon/monitor"
+	"github.com/metalogic-software/gomon/monitor"
 )
 
 const (

@@ -5,7 +5,7 @@
 package service
 
 import "net/http"
-import "github.com/rmorriso/gomon/monitor"
+import "github.com/metalogic-software/gomon/monitor"
 
 // HTTPService represents an HTTP URL to be polled and the
 // interval between polls in seconds

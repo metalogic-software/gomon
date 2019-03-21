@@ -7,7 +7,7 @@ package service
 import (
 	"fmt"
 
-	"github.com/rmorriso/gomon/monitor"
+	"github.com/metalogic-software/gomon/monitor"
 )
 
 // File represents a  file to be checked for a change in its hash
